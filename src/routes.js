@@ -20,7 +20,11 @@ export default function Routes() {
         }}
       >
         <stack.Screen name="Main" component={Main} />
-        <stack.Screen name="Users" component={Users} />
+        <stack.Screen
+          name="Users"
+          component={Users}
+          options={({ route }) => ({ title: route.params.user.name })}
+        />
       </stack.Navigator>
     </NavigationContainer>
   );

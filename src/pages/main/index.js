@@ -51,22 +51,31 @@ export default class Main extends Component {
 
     this.setState({ loading: true });
 
-    const response = await api.get(`/users/${newUser}`);
+    try {
+      if (newUser === '') {
+        throw new Error('não pode ficar com campo vazio');
+      }
+      const response = await api.get(`/users/${newUser}`);
 
-    const data = {
-      name: response.data.name,
-      login: response.data.login,
-      bio: response.data.bio,
-      avatar: response.data.avatar_url,
-    };
+      const data = {
+        name: response.data.name,
+        login: response.data.login,
+        bio: response.data.bio,
+        avatar: response.data.avatar_url,
+      };
 
-    this.setState({
-      users: [...users, data],
-      newUser: '',
-      loading: false,
-    });
+      this.setState({
+        users: [...users, data],
+        newUser: '',
+        loading: false,
+      });
 
-    Keyboard.dismiss();
+      Keyboard.dismiss();
+    } catch (Error) {
+      console.tron.log(Error.toString());
+    } finally {
+      this.setState({ loading: false });
+    }
   };
 
   handleNavigate(user) {

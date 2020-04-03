@@ -48,6 +48,10 @@ export default class User extends Component {
     const { page, loading, stars } = this.state;
     const { user } = route.params;
 
+    if (loading) {
+      return;
+    }
+
     const response = await api.get(`/users/${user.login}/starred?page=${page}`);
 
     this.setState({
@@ -78,7 +82,7 @@ export default class User extends Component {
           <Stars
             data={stars}
             keyExtractor={(star) => String(star.id)}
-            onEndReachedThereshold={0.1}
+            onEndReachedThereshold={0.2}
             onEndReached={this.loadMore}
             renderItem={({ item }) => (
               <Starred>

@@ -48,9 +48,8 @@ export default class User extends Component {
     const { page, loading, stars } = this.state;
     const { user } = route.params;
 
-    this.setState({ loading: true });
-
     const response = await api.get(`/users/${user.login}/starred?page=${page}`);
+
     this.setState({
       page: page + 1,
       loading: false,

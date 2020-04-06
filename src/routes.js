@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Main from './pages/main';
 import Users from './pages/users';
+import Repositories from './pages/repositories';
 
 const stack = createStackNavigator();
 
@@ -24,6 +25,11 @@ export default function Routes() {
           name="Users"
           component={Users}
           options={({ route }) => ({ title: route.params.user.name })}
+        />
+        <stack.Screen
+          name="Repositories"
+          component={Repositories}
+          options={{ headerTitle: 'Repositorios' }}
         />
       </stack.Navigator>
     </NavigationContainer>

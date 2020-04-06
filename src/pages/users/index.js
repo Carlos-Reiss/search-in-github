@@ -23,12 +23,16 @@ export default class User extends Component {
     route: PropTypes.shape({
       params: PropTypes.shape().isRequired,
     }).isRequired,
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+    }).isRequired,
   };
 
   state = {
     stars: [],
     loading: false,
     page: 1,
+    refreshing: false,
   };
 
   async componentDidMount() {
@@ -52,18 +56,36 @@ export default class User extends Component {
       return;
     }
 
-    const response = await api.get(`/users/${user.login}/starred?page=${page}`);
+    const response = await api.get(`/users/${user.login}/starred`, {
+      params: { page },
+    });
 
     this.setState({
       page: page + 1,
       loading: false,
-      stars: [...stars, ...response.data],
+      stars: page >= 2 ? [...stars, ...response.data] : [...response.data],
     });
+  };
+
+  refreshlist = async () => {
+    const { route } = this.props;
+    const { user } = route.params;
+
+    this.setState({ refreshing: true });
+
+    const response = await api.get(`/users/${user.login}/starred`);
+
+    this.setState({ stars: response.data, loading: false, refreshing: false });
+  };
+
+  Repo = (starred) => {
+    const { navigation } = this.props;
+    navigation.navigate('Repositories', { starred });
   };
 
   render() {
     const { route } = this.props;
-    const { stars, loading } = this.state;
+    const { stars, loading, refreshing } = this.state;
     const { user } = route.params;
 
     return (
@@ -84,8 +106,10 @@ export default class User extends Component {
             keyExtractor={(star) => String(star.id)}
             onEndReachedThereshold={0.2}
             onEndReached={this.loadMore}
+            onRefresh={this.refreshlist}
+            refreshing={refreshing}
             renderItem={({ item }) => (
-              <Starred>
+              <Starred onPress={() => this.Repo(item)}>
                 <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
                 <Info>
                   <Title>{item.name}</Title>

@@ -3,7 +3,7 @@
   pesquisas de usuários e visualizando as stars curtidas.
   
 ### Para utilizar esse projeto 
-  Utilizar comando para instalar react-native-cli, também necessario ter um emulador de android e Ios ou um proprio device para visualizar projeto
+  Utilizar comando para instalar react-native-cli, também necessário ter um emulador de Android ou Ios, serve sendoe o próprio device para visualizar projeto.
   ```bash
     yarn global add react-native-cli
   ```
